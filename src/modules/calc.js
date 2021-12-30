@@ -13,19 +13,8 @@ const calc = (price = 100) => {
     const calcSquareValue = +calcSquare.value;
 
     let totalValue = 0;
-    let totalValueVsbl = 0;
-    let intId;
     let calcCountValue = 1;
     let calcDayValue = 1;
-
-    const vsbl = () => {
-      totalValueVsbl += 10;
-      if (totalValueVsbl >= totalValue) {
-        totalValueVsbl = totalValue;
-        clearInterval(intId);
-      }
-      total.textContent = totalValueVsbl;
-    };
 
     if (calcCount.value > 1) {
       calcCountValue += +calcCount.value / 10;
@@ -44,7 +33,15 @@ const calc = (price = 100) => {
       totalValue = 0;
     }
 
-    intId = setInterval(vsbl, 1);
+    animate({
+      duration: 500,
+      timing(timeFraction) {
+        return timeFraction;
+      },
+      draw(progress) {
+        total.textContent = Math.round(progress * totalValue);
+      },
+    });
   };
 
   calcBlock.addEventListener("input", (e) => {
