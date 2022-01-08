@@ -1,3 +1,5 @@
+import { animate } from "./helpers";
+
 const sendForm = ({ formId, someElem = [] }) => {
   const form = document.getElementById(formId);
   const statusBlock = document.createElement("div");
@@ -8,6 +10,14 @@ const sendForm = ({ formId, someElem = [] }) => {
   const validate = (list) => {
     let success = true;
     list.forEach((elm) => {
+      if (elm.name === "user_email") {
+        if (!/[\w\d]+\@[\w\d]+\.[\w\d]/.test(elm.value)) {
+          success = false;
+          elm.style.border = "2px solid red";
+        } else {
+          elm.style.border = "";
+        }
+      }
       if (elm.name === "user_name") {
         if (/[^а-яА-Я\s]/.test(elm.value)) {
           success = false;
@@ -17,7 +27,7 @@ const sendForm = ({ formId, someElem = [] }) => {
         }
       }
       if (elm.name === "user_phone") {
-        if (/[^\d\+\(\)\-]/.test(elm.value)) {
+        if (/[^\d\+\(\)\-]/.test(elm.value) || elm.value.length < 11) {
           success = false;
           elm.style.border = "2px solid red";
         } else {
@@ -52,6 +62,7 @@ const sendForm = ({ formId, someElem = [] }) => {
     const formBody = {};
 
     statusBlock.style.color = "white";
+    statusBlock.style.opacity = 1;
     statusBlock.textContent = loadText;
     form.append(statusBlock);
 
@@ -75,6 +86,20 @@ const sendForm = ({ formId, someElem = [] }) => {
           formElements.forEach((input) => {
             input.value = "";
           });
+          setTimeout(() => {
+            animate({
+              duration: 300,
+              timing(timeFraction) {
+                return timeFraction;
+              },
+              draw(progress) {
+                statusBlock.style.opacity = 1 - progress;
+                if (progress == 1) {
+                  statusBlock.remove();
+                }
+              },
+            });
+          }, 2000);
         })
         .catch((error) => {
           statusBlock.textContent = errorText;
