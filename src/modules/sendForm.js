@@ -19,7 +19,7 @@ const sendForm = ({ formId, someElem = [] }) => {
         }
       }
       if (elm.name === "user_name") {
-        if (/[^а-яА-Я\s]/.test(elm.value)) {
+        if (/[^а-яА-Я\s]/.test(elm.value) || elm.value.length < 2) {
           success = false;
           elm.style.border = "2px solid red";
         } else {
