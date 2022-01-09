@@ -35,7 +35,10 @@ const sendForm = ({ formId, someElem = [] }) => {
         }
       }
       if (elm.name === "user_message") {
-        if (/[^а-яА-Я\s\d\.\,\"\'\!\?\:\;\(\)]/.test(elm.value)) {
+        if (
+          /[^а-яА-Я\s\d\.\,\"\'\!\?\:\;\(\)]/.test(elm.value) ||
+          elm.value.length > 1
+        ) {
           success = false;
           elm.style.border = "2px solid red";
         } else {
@@ -63,7 +66,6 @@ const sendForm = ({ formId, someElem = [] }) => {
 
     statusBlock.style.color = "white";
     statusBlock.style.opacity = 1;
-    statusBlock.textContent = loadText;
     form.append(statusBlock);
 
     formData.forEach((val, key) => {
@@ -80,6 +82,7 @@ const sendForm = ({ formId, someElem = [] }) => {
     });
 
     if (validate(formElements)) {
+      statusBlock.textContent = loadText;
       sendData(formBody)
         .then((data) => {
           statusBlock.textContent = successText;
@@ -106,7 +109,6 @@ const sendForm = ({ formId, someElem = [] }) => {
         });
     } else {
       alert("Введенные данные не валидны");
-      statusBlock.textContent = errorText;
     }
   };
 

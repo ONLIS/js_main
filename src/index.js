@@ -9,7 +9,7 @@ import sendForm from "./modules/sendForm";
 
 const forms = document.querySelectorAll("form");
 
-timer("01 january 2022");
+timer("16 january 2022");
 menu();
 modal();
 validate();
